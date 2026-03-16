@@ -1,0 +1,47 @@
+{
+  "name": "synaptix-website",
+  "version": "1.0.0",
+  "description": "Synaptix — AI-powered Level II home sleep diagnostics website",
+  "main": "dist/index.html",
+  "scripts": {
+    "dev": "live-server . --port=3000 --open=/src/index.html --ignore=node_modules,dist,.git",
+    "build": "npm run build:clean && npm run build:html && npm run build:css && npm run build:js && npm run build:config && npm run build:assets",
+    "build:clean": "rm -rf dist && mkdir -p dist dist/assets/css dist/assets/js dist/assets/images",
+    "build:html": "for f in src/*.html; do sed 's|\\.\\./||g' \"$f\" > \"dist/$(basename \"$f\")\"; done",
+    "build:css": "cp assets/css/main.css dist/assets/css/",
+    "build:js": "cp assets/js/main.js dist/assets/js/",
+    "build:config": "cp config.js dist/",
+    "build:assets": "cp -r assets/images/* dist/assets/images/ 2>/dev/null || :",
+    "preview": "live-server dist --port=3001 --open=/index.html",
+    "optimize": "npm run optimize:css && npm run optimize:js",
+    "optimize:css": "postcss assets/css/main.css -o dist/assets/css/main.min.css --use autoprefixer cssnano",
+    "optimize:js": "terser assets/js/main.js -o dist/assets/js/main.min.js --compress --mangle",
+    "deploy": "npm run build && npm run optimize",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "sleep-diagnostics",
+    "medical-technology",
+    "ai-scoring",
+    "website"
+  ],
+  "author": "Synaptix",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "live-server": "^1.2.2",
+    "postcss": "^8.4.32",
+    "postcss-cli": "^11.0.0",
+    "terser": "^5.24.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "maintained node versions"
+  ]
+}
