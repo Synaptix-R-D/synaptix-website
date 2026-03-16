@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synaptix — 3D Final</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /*
+            VARIANT 3C — "HYBRID"
+            Best-of-both: combines the original Pulse hero canvas energy
+            with 3A's refined layout and 3B's device mock + stack approach.
+            Key features:
+            - Full-width waveform hero (like original) but cleaner lines
+            - Stats in a single horizontal band (like 3A)
+            - Platform as a visual diagram with connected nodes
+            - Comparison as side-by-side column cards (like 3B)
+            - GTM timeline on a single horizontal line
+            - Added "Available Now" callout card from concept 2
+            - Strongest footer with Beatrite integration
+        */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-base: #080e1c;
+            --bg-mid: #0c1629;
+            --bg-elevated: #111d36;
+            --teal: #00e5c3;
+            --teal-soft: #33ffd8;
+            --teal-dim: rgba(0, 229, 195, 0.1);
+            --teal-glow: rgba(0, 229, 195, 0.3);
+            --cyan: #06b6d4;
+            --gold: #f59e0b;
+            --red: #f87171;
+            --purple: #a78bfa;
+            --text-primary: #eef2f6;
+            --text-secondary: rgba(238, 242, 246, 0.55);
+            --text-muted: rgba(238, 242, 246, 0.28);
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAV === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s;
+        }
+
+        nav.scrolled {
+            background: rgba(8, 14, 28, 0.94);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-wave {
+            width: 32px;
+            height: 20px;
+        }
+
+        .nav-word {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-sub {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-left: 0.5rem;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-right a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-right a:hover { color: var(--text-primary); }
+
+        .nav-cta {
+            background: var(--teal);
+            color: var(--bg-base);
+            padding: 0.55rem 1.3rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            box-shadow: 0 6px 20px var(--teal-glow);
+        }
+
+        /* === HERO (SPLIT) === */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            align-items: center;
+            padding: 6rem 7% 4rem;
+            position: relative;
+            overflow: hidden;
+            gap: 4rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 60%;
+            height: 140%;
+            background: radial-gradient(ellipse, rgba(0, 229, 195, 0.05), transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-left {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 0.45rem 1rem;
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.3s forwards;
+        }
+
+        .hero-badge .pulse {
+            width: 7px;
+            height: 7px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--teal);
+            animation: pDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pDot {
+            0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 5.5vw, 5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -2.5px;
+            margin-bottom: 1.8rem;
+        }
+
+        .hero h1 .w {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(60px);
+            animation: wIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero h1 .w:nth-child(1) { animation-delay: 0.45s; }
+        .hero h1 .w:nth-child(2) { animation-delay: 0.55s; }
+        .hero h1 .w:nth-child(3) { animation-delay: 0.65s; }
+        .hero h1 .w:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes wIn { to { opacity: 1; transform: translateY(0); } }
+
+        .hero h1 .glow {
+            background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px var(--teal-glow));
+        }
+
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 2.5rem;
+            max-width: 480px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 1s forwards;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 1.15s forwards;
+        }
+
+        .btn-main {
+            background: var(--teal);
+            color: var(--bg-base);
+            padding: 0.95rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-main:hover {
+            box-shadow: 0 10px 36px var(--teal-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 0.95rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1.5px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === DEVICE MOCK === */
+        .hero-right {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+        .device-mock {
+            width: 100%;
+            max-width: 440px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            animation: fadeUp 1s ease 0.5s forwards;
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .device-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--teal);
+        }
+
+        .device-status .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--teal);
+        }
+
+        .device-id {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .signal-display {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            height: 130px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signal-display canvas { width: 100%; height: 100%; }
+
+        .signal-label {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.7rem;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .vitals-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .vital {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.7rem;
+            text-align: center;
+        }
+
+        .vital-label {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .vital-num {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--teal);
+        }
+
+        .vital-unit {
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .ai-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--teal-dim);
+            border: 1px solid rgba(0,229,195,0.15);
+            border-radius: 10px;
+            padding: 0.6rem 0.8rem;
+        }
+
+        .ai-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--teal);
+            animation: pDot 1.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .ai-text {
+            font-size: 0.75rem;
+            color: var(--teal);
+            font-weight: 500;
+        }
+
+        /* === SECTIONS === */
+        section { padding: 8rem 7%; position: relative; }
+
+        .eyebrow {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 20px;
+            height: 1.5px;
+            background: var(--teal);
+        }
+
+        .s-title {
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .s-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            line-height: 1.75;
+        }
+
+        /* === STATS BAND === */
+        .stats-band {
+            background: var(--bg-mid);
+            padding: 0;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stats-inner {
+            display: flex;
+        }
+
+        .stat-item {
+            flex: 1;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            border-right: 1px solid var(--glass-border);
+            transition: background 0.3s;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .stat-item.visible { opacity: 1; transform: translateY(0); }
+        .stat-item:last-child { border-right: none; }
+        .stat-item:hover { background: rgba(255,255,255,0.02); }
+
+        .stat-num {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .stat-item:nth-child(1) .stat-num { color: var(--teal); }
+        .stat-item:nth-child(2) .stat-num { color: var(--gold); }
+        .stat-item:nth-child(3) .stat-num { color: var(--cyan); }
+        .stat-item:nth-child(4) .stat-num { color: var(--red); }
+
+        .stat-item .lbl {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* === PROBLEM + NOW CARD === */
+        .problem-section { background: var(--bg-base); }
+
+        .problem-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 3rem;
+            margin-top: 3rem;
+            align-items: start;
+        }
+
+        .problem-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .p-card {
+            padding: 1.5rem 1.8rem;
+            border-left: 3px solid;
+            background: var(--glass);
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateX(-15px);
+        }
+
+        .p-card.visible { opacity: 1; transform: translateX(0); }
+        .p-card:hover { transform: translateX(6px); }
+
+        .p-card:nth-child(1) { border-left-color: var(--red); }
+        .p-card:nth-child(2) { border-left-color: var(--gold); }
+        .p-card:nth-child(3) { border-left-color: var(--purple); }
+
+        .p-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .p-card:nth-child(1) h4 { color: var(--red); }
+        .p-card:nth-child(2) h4 { color: var(--gold); }
+        .p-card:nth-child(3) h4 { color: var(--purple); }
+        .p-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+        .now-card {
+            background: var(--glass);
+            border: 2px solid var(--teal);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 0.5s forwards;
+        }
+
+        .now-badge {
+            position: absolute;
+            top: -11px;
+            left: 20px;
+            background: var(--teal);
+            color: var(--bg-base);
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            padding: 0.25rem 0.7rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .now-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--teal);
+        }
+
+        .now-card p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .now-price {
+            display: inline-block;
+            background: var(--teal-dim);
+            color: var(--teal);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* === PLATFORM DIAGRAM === */
+        .platform-section {
+            background: var(--bg-mid);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .diagram {
+            margin-top: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr 60px 1fr;
+            gap: 0;
+            align-items: stretch;
+        }
+
+        .dia-node {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .dia-node.visible { opacity: 1; transform: translateY(0); }
+
+        .dia-node:hover {
+            border-color: rgba(0,229,195,0.2);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.3);
+            transform: translateY(-4px);
+        }
+
+        .dia-head {
+            padding: 1.2rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .dia-node:nth-child(1) .dia-head { background: rgba(0,229,195,0.08); color: var(--teal); border-bottom: 1px solid rgba(0,229,195,0.1); }
+        .dia-node:nth-child(3) .dia-head { background: rgba(245,158,11,0.08); color: var(--gold); border-bottom: 1px solid rgba(245,158,11,0.1); }
+        .dia-node:nth-child(5) .dia-head { background: rgba(6,182,212,0.08); color: var(--cyan); border-bottom: 1px solid rgba(6,182,212,0.1); }
+
+        .dia-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dia-node:nth-child(1) .dia-icon { background: rgba(0,229,195,0.15); }
+        .dia-node:nth-child(3) .dia-icon { background: rgba(245,158,11,0.15); }
+        .dia-node:nth-child(5) .dia-icon { background: rgba(6,182,212,0.15); }
+
+        .dia-body {
+            padding: 1.2rem 1.5rem;
+        }
+
+        .dia-body li {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.4rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .dia-body li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .dia-node:nth-child(1) .dia-body li::before { color: var(--teal); }
+        .dia-node:nth-child(3) .dia-body li::before { color: var(--gold); }
+        .dia-node:nth-child(5) .dia-body li::before { color: var(--cyan); }
+
+        .dia-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .dia-connector::before {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            animation: flowPulse 2s ease-in-out infinite;
+        }
+
+        .dia-connector:last-of-type::before {
+            background: linear-gradient(90deg, var(--gold), var(--cyan));
+        }
+
+        @keyframes flowPulse {
+            0%,100% { opacity: 0.3; } 50% { opacity: 1; }
+        }
+
+        .dia-connector .dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--teal);
+            box-shadow: 0 0 8px var(--teal);
+        }
+
+        /* === GTM HORIZONTAL === */
+        .gtm-section { background: var(--bg-base); }
+
+        .gtm-hor {
+            margin-top: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .gtm-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .gtm-card.visible { opacity: 1; transform: translateY(0); }
+
+        .gtm-card:hover {
+            border-color: rgba(255,255,255,0.12);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .gtm-head {
+            padding: 1.5rem 2rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .gtm-card:nth-child(1) .gtm-head {
+            background: linear-gradient(135deg, rgba(0,229,195,0.1), transparent);
+            color: var(--teal);
+            border-bottom: 1px solid rgba(0,229,195,0.1);
+        }
+
+        .gtm-card:nth-child(2) .gtm-head {
+            background: linear-gradient(135deg, rgba(245,158,11,0.1), transparent);
+            color: var(--gold);
+            border-bottom: 1px solid rgba(245,158,11,0.1);
+        }
+
+        .gtm-head small {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            margin-top: 0.2rem;
+            opacity: 0.7;
+        }
+
+        .gtm-body {
+            padding: 1.5rem 2rem;
+        }
+
+        .gtm-body li {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .gtm-body li:last-child { border-bottom: none; }
+
+        /* === COMPARISON COLUMNS === */
+        .comp-section {
+            background: var(--bg-mid);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .comp-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            margin-top: 4rem;
+        }
+
+        .comp-c {
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .comp-c.visible { opacity: 1; transform: translateY(0); }
+
+        .comp-c:last-child {
+            border-color: rgba(0,229,195,0.3);
+        }
+
+        .comp-ch {
+            padding: 1.2rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: var(--glass);
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .comp-c:last-child .comp-ch {
+            color: var(--teal);
+            background: var(--teal-dim);
+        }
+
+        .comp-r {
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .comp-r:last-child { border-bottom: none; }
+
+        .comp-c:last-child .comp-r { color: var(--text-secondary); }
+
+        .ck { color: var(--teal) !important; font-weight: 600; }
+        .cx { color: var(--red) !important; opacity: 0.5; }
+
+        .comp-tagline {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* === CTA === */
+        .cta-section {
+            background: var(--bg-base);
+            text-align: center;
+            padding: 10rem 7%;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(0,229,195,0.06), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cta-section .sub {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--bg-base);
+            padding: 1.1rem 2.8rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 44px rgba(245, 158, 11, 0.3);
+        }
+
+        .cta-email {
+            margin-top: 1.2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
+        }
+
+        /* === FOOTER === */
+        footer {
+            padding: 3.5rem 7% 2.5rem;
+            border-top: 1px solid var(--glass-border);
+            background: var(--bg-base);
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 4rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .footer-col h5 {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover { color: var(--teal); }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-bottom span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .footer-bottom a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; gap: 2rem; }
+            .hero-right { display: none; }
+            .diagram { grid-template-columns: 1fr; gap: 1rem; }
+            .dia-connector { display: none; }
+            .problem-layout { grid-template-columns: 1fr; }
+            .comp-cols { grid-template-columns: 1fr; }
+            .gtm-hor { grid-template-columns: 1fr; }
+            .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            section { padding: 5rem 5%; }
+            .hero { padding: 6rem 5%; }
+            nav { padding: 1rem 5%; }
+            .stats-inner { flex-direction: column; }
+            .stat-item { border-right: none; border-bottom: 1px solid var(--glass-border); }
+            .stat-item:last-child { border-bottom: none; }
+            .nav-right a:not(.nav-cta) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="nav-brand">
+            <svg class="nav-wave" viewBox="0 0 32 20" fill="none">
+                <path d="M1 10 C5 10, 6 4, 8 4 C10 4, 11 16, 13 16 C15 16, 16 2, 18 2 C20 2, 21 18, 23 18 C25 18, 26 8, 28 8 C30 8, 31 10, 31 10"
+                      stroke="url(#ng)" stroke-width="2" stroke-linecap="round"/>
+                <defs><linearGradient id="ng" x1="0" y1="10" x2="32" y2="10">
+                    <stop offset="0%" stop-color="var(--teal)"/>
+                    <stop offset="100%" stop-color="var(--cyan)"/>
+                </linearGradient></defs>
+            </svg>
+            <span class="nav-word">Synaptix</span>
+            <span class="nav-sub">AI for Health</span>
+        </div>
+        <div class="nav-right">
+            <a href="#platform">Platform</a>
+            <a href="#compare">Compare</a>
+            <a href="#strategy">Strategy</a>
+            <a href="#" class="nav-cta">Partner With Us</a>
+        </div>
+    </nav>
+
+    <!-- Hero (Split: text + device) -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                Building the Infrastructure for Sleep Intelligence
+            </div>
+            <h1>
+                <span class="w">Clinical-Grade </span>
+                <span class="w">Sleep Labs </span>
+                <span class="w">— </span>
+                <span class="w glow">Anywhere.</span>
+            </h1>
+            <p class="hero-sub">AI-powered Level II home sleep diagnostics. Multi-modal ECG+EEG. Proprietary time-series AI. Hardware-software co-design.</p>
+            <div class="hero-btns">
+                <a href="#platform" class="btn-main">Explore the Platform</a>
+                <a href="#" class="btn-secondary">Partner With Us</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="device-mock">
+                <div class="device-header">
+                    <div class="device-status">
+                        <span class="dot"></span>
+                        SLEEP STUDY ACTIVE
+                    </div>
+                    <span class="device-id">Study #SX-4782</span>
+                </div>
+                <div class="signal-display">
+                    <span class="signal-label">ECG + EEG Fusion</span>
+                    <canvas id="signalCvs"></canvas>
+                </div>
+                <div class="vitals-row">
+                    <div class="vital">
+                        <div class="vital-label">Sleep Stage</div>
+                        <div class="vital-num">N3</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">AHI</div>
+                        <div class="vital-num">4.2</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">SpO2</div>
+                        <div class="vital-num">97<span class="vital-unit">%</span></div>
+                    </div>
+                </div>
+                <div class="ai-bar">
+                    <span class="ai-dot"></span>
+                    <span class="ai-text">AI scoring in progress — 85%+ agreement with manual</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Band -->
+    <section class="stats-band">
+        <div class="stats-inner">
+            <div class="stat-item"><div class="stat-num">70M+</div><div class="lbl">Americans with Sleep Disorders</div></div>
+            <div class="stat-item"><div class="stat-num">$4,000</div><div class="lbl">Average In-Lab PSG Cost</div></div>
+            <div class="stat-item"><div class="stat-num">12 Wks</div><div class="lbl">Average Wait for Diagnosis</div></div>
+            <div class="stat-item"><div class="stat-num">80%</div><div class="lbl">OSA Cases Undiagnosed</div></div>
+        </div>
+    </section>
+
+    <!-- Problem + Available Now -->
+    <section class="problem-section">
+        <div class="eyebrow">The Diagnostic Gap</div>
+        <h2 class="s-title">The system is broken.<br>We're fixing it.</h2>
+
+        <div class="problem-layout">
+            <div class="problem-cards">
+                <div class="p-card">
+                    <h4>Too Expensive</h4>
+                    <p>Gold-standard PSG costs $2,000–$5,000 per study — prohibitive for most patients and strained payer systems.</p>
+                </div>
+                <div class="p-card">
+                    <h4>Too Slow</h4>
+                    <p>6–12 week wait times at sleep labs mean delayed diagnoses, worsening conditions, and frustrated patients.</p>
+                </div>
+                <div class="p-card">
+                    <h4>Consumer Wearables Fall Short</h4>
+                    <p>Oura, Apple Watch, Fitbit use actigraphy — not diagnostic-grade biosignals. Clinicians cannot act on outputs.</p>
+                </div>
+            </div>
+
+            <div class="now-card">
+                <span class="now-badge">Available Now</span>
+                <h3>AI Sleep Study Scoring</h3>
+                <p>Eliminate your manual scoring backlog. Our AI scores sleep studies with 85%+ agreement with manual scoring. Integrates with existing lab workflows and EMR systems.</p>
+                <p>Lightweight cloud deployment. Results in 24–48 hours.</p>
+                <span class="now-price">$25–$75 per study</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Diagram -->
+    <section class="platform-section" id="platform">
+        <div class="eyebrow">The Synaptix Platform</div>
+        <h2 class="s-title">End-to-end clinical-grade<br>sleep diagnostic ecosystem</h2>
+        <p class="s-desc">Powered by hardware-software co-design. Signal preprocessing at the chip level.</p>
+
+        <div class="diagram">
+            <div class="dia-node">
+                <div class="dia-head">
+                    <div class="dia-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+                    Edge Sensing Hub
+                </div>
+                <div class="dia-body">
+                    <ul>
+                        <li>Bluetooth SoC</li>
+                        <li>Multi-lead ECG</li>
+                        <li>EEG acquisition</li>
+                        <li>12+ hr battery</li>
+                        <li>On-device preprocessing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dia-connector"><span class="dot"></span></div>
+
+            <div class="dia-node">
+                <div class="dia-head">
+                    <div class="dia-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+                    Mobile App
+                </div>
+                <div class="dia-body">
+                    <ul>
+                        <li>Signal validation</li>
+                        <li>Guided setup</li>
+                        <li>Secure upload</li>
+                        <li>Results reporting</li>
+                        <li>Provider alerts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dia-connector"><span class="dot"></span></div>
+
+            <div class="dia-node">
+                <div class="dia-head">
+                    <div class="dia-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M10 21h4"/></svg></div>
+                    AI Cloud Engine
+                </div>
+                <div class="dia-body">
+                    <ul>
+                        <li>Time-series deep learning</li>
+                        <li>ECG+EEG fusion</li>
+                        <li>5-stage classification</li>
+                        <li>Apnea detection</li>
+                        <li>Longitudinal analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comp-section" id="compare">
+        <div class="eyebrow">The Competitive Gap</div>
+        <h2 class="s-title">No scalable, clinical-grade<br>home solution. Until now.</h2>
+
+        <div class="comp-cols">
+            <div class="comp-c">
+                <div class="comp-ch">In-Lab PSG</div>
+                <div class="comp-r"><span>Accuracy</span><span class="ck">&#10003; High</span></div>
+                <div class="comp-r"><span>Cost</span><span class="cx">&#10007; $2K–$5K</span></div>
+                <div class="comp-r"><span>Wait</span><span class="cx">&#10007; 6–12 wks</span></div>
+                <div class="comp-r"><span>Setting</span><span class="cx">&#10007; Hospital</span></div>
+                <div class="comp-r"><span>Diagnostic</span><span class="ck">&#10003; Yes</span></div>
+                <div class="comp-r"><span>Scalable</span><span class="cx">&#10007; No</span></div>
+            </div>
+            <div class="comp-c">
+                <div class="comp-ch">Consumer Wearables</div>
+                <div class="comp-r"><span>Accuracy</span><span class="cx">&#10007; Low</span></div>
+                <div class="comp-r"><span>Cost</span><span>~$300–$500</span></div>
+                <div class="comp-r"><span>Wait</span><span class="ck">&#10003; Immediate</span></div>
+                <div class="comp-r"><span>Setting</span><span class="ck">&#10003; Home</span></div>
+                <div class="comp-r"><span>Diagnostic</span><span class="cx">&#10007; No</span></div>
+                <div class="comp-r"><span>Scalable</span><span class="ck">&#10003; Yes</span></div>
+            </div>
+            <div class="comp-c">
+                <div class="comp-ch">Synaptix</div>
+                <div class="comp-r"><span>Accuracy</span><span class="ck">&#10003; Clinical-Grade</span></div>
+                <div class="comp-r"><span>Cost</span><span class="ck">&#10003; Affordable</span></div>
+                <div class="comp-r"><span>Wait</span><span class="ck">&#10003; 24–48 hrs</span></div>
+                <div class="comp-r"><span>Setting</span><span class="ck">&#10003; Home</span></div>
+                <div class="comp-r"><span>Diagnostic</span><span class="ck">&#10003; Yes</span></div>
+                <div class="comp-r"><span>Scalable</span><span class="ck">&#10003; Yes</span></div>
+            </div>
+        </div>
+        <p class="comp-tagline">The only solution delivering clinical-grade accuracy at home, at scale.</p>
+    </section>
+
+    <!-- GTM -->
+    <section class="gtm-section" id="strategy">
+        <div class="eyebrow">Go-to-Market</div>
+        <h2 class="s-title">Land & Expand</h2>
+        <p class="s-desc">Build trust with software. Deploy hardware into the same network.</p>
+
+        <div class="gtm-hor">
+            <div class="gtm-card">
+                <div class="gtm-head">Phase 1 — Land<small>AI-Scoring SaaS for Sleep Clinics</small></div>
+                <div class="gtm-body"><ul>
+                    <li>Eliminate manual scoring backlogs</li>
+                    <li>Cloud AI integrates with existing workflows</li>
+                    <li>Establish trust with sleep physicians</li>
+                    <li>Revenue: $25–$75 per study</li>
+                </ul></div>
+            </div>
+            <div class="gtm-card">
+                <div class="gtm-head">Phase 2 — Expand<small>Type-II HST Device into Labs</small></div>
+                <div class="gtm-body"><ul>
+                    <li>Deploy proprietary hardware into partner labs</li>
+                    <li>CPT 95800/95806 reimbursement: $300–$450/study</li>
+                    <li>Hardware ASP: $600–$900/device</li>
+                    <li>Blended margin compounds over time</li>
+                </ul></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>The Future of<br>Sleep Diagnostics</h2>
+        <p class="sub">Building the infrastructure for Sleep Intelligence.</p>
+        <a href="#" class="btn-gold">Get in Touch</a>
+        <p class="cta-email">info@synaptix.ai</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h4>Synaptix</h4>
+                <p>AI-powered clinical-grade home sleep diagnostics. Building the infrastructure for Sleep Intelligence.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Platform</h5>
+                <a href="#platform">Sensing Hub</a>
+                <a href="#platform">Mobile App</a>
+                <a href="#platform">AI Cloud Engine</a>
+            </div>
+            <div class="footer-col">
+                <h5>Company</h5>
+                <a href="#">Team</a>
+                <a href="#">Contact</a>
+                <a href="https://beatrite.com">Beatrite</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Synaptix LLC. All rights reserved.</span>
+            <span>A <a href="https://beatrite.com">Beatrite</a> company</span>
+        </div>
+    </footer>
+
+    <script>
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.stat-item, .p-card, .dia-node, .comp-c, .gtm-card').forEach((el, i) => {
+            el.style.transitionProperty = 'opacity, transform';
+            el.style.transitionDuration = '0.6s';
+            el.style.transitionTimingFunction = 'ease';
+            el.style.transitionDelay = `${i * 80}ms`;
+            io.observe(el);
+        });
+
+        // Signal canvas in device mock
+        const sc = document.getElementById('signalCvs');
+        if (sc) {
+            const sctx = sc.getContext('2d');
+            function resizeSig() {
+                const rect = sc.parentElement.getBoundingClientRect();
+                sc.width = rect.width * devicePixelRatio;
+                sc.height = rect.height * devicePixelRatio;
+                sctx.scale(devicePixelRatio, devicePixelRatio);
+            }
+            resizeSig();
+            addEventListener('resize', resizeSig);
+
+            function drawSig(t) {
+                const w = sc.width / devicePixelRatio;
+                const h = sc.height / devicePixelRatio;
+                sctx.clearRect(0, 0, w, h);
+
+                // EEG line (top half)
+                sctx.beginPath();
+                sctx.strokeStyle = 'rgba(6, 182, 212, 0.5)';
+                sctx.lineWidth = 1.5;
+                for (let x = 0; x < w; x++) {
+                    const y = h * 0.3 + Math.sin(x / 12 + t / 400) * 15 + Math.sin(x / 5 + t / 200) * 5;
+                    x === 0 ? sctx.moveTo(x, y) : sctx.lineTo(x, y);
+                }
+                sctx.stroke();
+
+                // ECG line (bottom half)
+                sctx.beginPath();
+                sctx.strokeStyle = 'rgba(0, 229, 195, 0.6)';
+                sctx.lineWidth = 1.5;
+                for (let x = 0; x < w; x++) {
+                    let y = h * 0.7;
+                    const lx = (x + t * 0.08) % 80;
+                    if (lx > 30 && lx < 35) y -= (lx - 30) * 7;
+                    else if (lx >= 35 && lx < 38) y += (lx - 35) * 14;
+                    else if (lx >= 38 && lx < 42) y -= (lx - 38) * 5;
+                    else y += Math.sin(x / 20 + t / 600) * 3;
+                    x === 0 ? sctx.moveTo(x, y) : sctx.lineTo(x, y);
+                }
+                sctx.stroke();
+
+                requestAnimationFrame(drawSig);
+            }
+            requestAnimationFrame(drawSig);
+        }
+    </script>
+</body>
+</html>

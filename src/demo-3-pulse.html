@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synaptix — Pulse Concept</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-base: #080f1e;
+            --bg-mid: #0c1629;
+            --bg-elevated: #111d35;
+            --teal: #00e5c3;
+            --teal-light: #33ffd8;
+            --teal-dim: rgba(0, 229, 195, 0.12);
+            --teal-glow: rgba(0, 229, 195, 0.35);
+            --cyan: #06b6d4;
+            --gold: #f59e0b;
+            --red: #ef4444;
+            --text-primary: #edf2f7;
+            --text-secondary: rgba(237, 242, 247, 0.6);
+            --text-muted: rgba(237, 242, 247, 0.3);
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(0, 229, 195, 0.25);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAV === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.3rem 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(8, 15, 30, 0.92);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .nav-logo-wave {
+            width: 36px;
+            height: 36px;
+            position: relative;
+        }
+
+        .nav-logo-wave svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .nav-logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-logo-sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-right a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-right a:hover { color: var(--text-primary); }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            color: var(--bg-base);
+            padding: 0.65rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px var(--teal-glow);
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 6%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-canvas-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-canvas-wrap canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Gradient overlay at bottom for transition */
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(transparent, var(--bg-base));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 780px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            animation: slideUp 0.7s ease 0.3s forwards;
+        }
+
+        .hero-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--teal);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.4); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6.5vw, 5.8rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -3px;
+            margin-bottom: 1.8rem;
+        }
+
+        .hero h1 .word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(60px) rotateX(40deg);
+            animation: heroWord 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero h1 .word:nth-child(1) { animation-delay: 0.5s; }
+        .hero h1 .word:nth-child(2) { animation-delay: 0.6s; }
+        .hero h1 .word:nth-child(3) { animation-delay: 0.7s; }
+        .hero h1 .word:nth-child(4) { animation-delay: 0.85s; }
+
+        @keyframes heroWord {
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
+
+        .hero h1 .glow {
+            background: linear-gradient(135deg, var(--teal), var(--teal-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px var(--teal-glow));
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 540px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: slideUp 0.7s ease 1s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: slideUp 0.7s ease 1.15s forwards;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            color: var(--bg-base);
+            padding: 1rem 2.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--teal-light), var(--teal));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-gradient:hover::before { opacity: 1; }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--teal-glow);
+        }
+
+        .btn-gradient span { position: relative; z-index: 1; }
+
+        .btn-outline-glow {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1rem 2.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1.5px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-outline-glow:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            box-shadow: 0 0 20px var(--teal-dim);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === WAVE DIVIDER === */
+        .wave-divider {
+            width: 100%;
+            height: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-divider svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* === SECTIONS === */
+        section {
+            padding: 7rem 6%;
+            position: relative;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 1rem;
+            line-height: 1.15;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 580px;
+            line-height: 1.75;
+        }
+
+        /* === PROBLEM === */
+        .problem {
+            background: var(--bg-mid);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .problem-tagline {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 3.5rem;
+            max-width: 650px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-box {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-radius: 14px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .stat-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-box:nth-child(1)::before { background: var(--teal); }
+        .stat-box:nth-child(2)::before { background: var(--gold); }
+        .stat-box:nth-child(3)::before { background: var(--cyan); }
+        .stat-box:nth-child(4)::before { background: var(--red); }
+
+        .stat-box:hover {
+            border-color: var(--glass-border-hover);
+            transform: translateY(-4px);
+        }
+
+        .stat-val {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.6rem;
+        }
+
+        .stat-box:nth-child(1) .stat-val { color: var(--teal); }
+        .stat-box:nth-child(2) .stat-val { color: var(--gold); }
+        .stat-box:nth-child(3) .stat-val { color: var(--cyan); }
+        .stat-box:nth-child(4) .stat-val { color: var(--red); }
+
+        .stat-box .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .pain-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        .pain-card {
+            padding: 1.8rem;
+            border-radius: 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .pain-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pain-card:nth-child(1) { border-left-color: var(--red); }
+        .pain-card:nth-child(2) { border-left-color: var(--gold); }
+        .pain-card:nth-child(3) { border-left-color: #8b5cf6; }
+
+        .pain-card h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pain-card:nth-child(1) h4 { color: var(--red); }
+        .pain-card:nth-child(2) h4 { color: var(--gold); }
+        .pain-card:nth-child(3) h4 { color: #8b5cf6; }
+
+        .pain-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* === PLATFORM === */
+        .platform {
+            background: var(--bg-base);
+            position: relative;
+        }
+
+        /* Flowing waveform connector */
+        .platform::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--teal), transparent);
+            animation: flowLine 3s ease-in-out infinite;
+        }
+
+        @keyframes flowLine {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .plat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .plat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .plat-card:hover {
+            border-color: var(--glass-border-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .plat-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .plat-card:nth-child(1) .plat-header { background: linear-gradient(135deg, rgba(0, 229, 195, 0.15), rgba(0, 229, 195, 0.05)); color: var(--teal); border-bottom: 1px solid rgba(0,229,195,0.15); }
+        .plat-card:nth-child(2) .plat-header { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05)); color: var(--gold); border-bottom: 1px solid rgba(245,158,11,0.15); }
+        .plat-card:nth-child(3) .plat-header { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(6, 182, 212, 0.05)); color: var(--cyan); border-bottom: 1px solid rgba(6,182,212,0.15); }
+
+        .plat-header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plat-card:nth-child(1) .plat-header-icon { background: rgba(0,229,195,0.2); }
+        .plat-card:nth-child(2) .plat-header-icon { background: rgba(245,158,11,0.2); }
+        .plat-card:nth-child(3) .plat-header-icon { background: rgba(6,182,212,0.2); }
+
+        .plat-type {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.8rem 2rem 0;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .plat-body {
+            padding: 0.8rem 2rem 2rem;
+        }
+
+        .plat-body ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .plat-body li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .plat-body li:last-child { border-bottom: none; }
+
+        .plat-body li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+        }
+
+        .plat-card:nth-child(1) .plat-body li::before { color: var(--teal); }
+        .plat-card:nth-child(2) .plat-body li::before { color: var(--gold); }
+        .plat-card:nth-child(3) .plat-body li::before { color: var(--cyan); }
+
+        .plat-footer-note {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* === GTM === */
+        .gtm {
+            background: var(--bg-mid);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .gtm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+            position: relative;
+        }
+
+        /* Connecting arrow between phases */
+        .gtm-grid::after {
+            content: '→';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: var(--teal);
+            z-index: 1;
+            background: var(--bg-mid);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gtm-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .gtm-card-header {
+            padding: 1.5rem 2rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .gtm-card:nth-child(1) .gtm-card-header {
+            background: linear-gradient(135deg, rgba(0,229,195,0.15), transparent);
+            color: var(--teal);
+            border-bottom: 1px solid rgba(0,229,195,0.15);
+        }
+
+        .gtm-card:nth-child(2) .gtm-card-header {
+            background: linear-gradient(135deg, rgba(245,158,11,0.15), transparent);
+            color: var(--gold);
+            border-bottom: 1px solid rgba(245,158,11,0.15);
+        }
+
+        .gtm-card-subtitle {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 0.3rem;
+            opacity: 0.7;
+        }
+
+        .gtm-card-body {
+            padding: 2rem;
+        }
+
+        .gtm-card-body ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .gtm-card-body li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            line-height: 1.5;
+        }
+
+        .gtm-card-body li:last-child { border-bottom: none; }
+
+        /* === CTA === */
+        .cta {
+            background: var(--bg-base);
+            text-align: center;
+            padding: 10rem 6%;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--teal-dim), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--bg-base);
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 50px rgba(245, 158, 11, 0.35);
+        }
+
+        .cta-email {
+            margin-top: 1.2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === FOOTER === */
+        footer {
+            padding: 2.5rem 6%;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-base);
+        }
+
+        footer .left {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        footer .right {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        footer .right a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .platform-grid { grid-template-columns: 1fr; }
+            .pain-row { grid-template-columns: 1fr; }
+            .gtm-grid { grid-template-columns: 1fr; }
+            .gtm-grid::after { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .stats-row { grid-template-columns: 1fr; }
+            .nav-right a:not(.nav-cta) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav -->
+    <nav id="navbar">
+        <div class="nav-logo">
+            <div class="nav-logo-wave">
+                <svg viewBox="0 0 36 36" fill="none">
+                    <path d="M2 18 C6 18, 8 10, 10 10 C12 10, 13 22, 15 22 C17 22, 18 6, 20 6 C22 6, 23 26, 25 26 C27 26, 28 14, 30 14 C32 14, 34 18, 34 18"
+                          stroke="url(#navGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                    <defs>
+                        <linearGradient id="navGrad" x1="0" y1="18" x2="36" y2="18">
+                            <stop offset="0%" stop-color="var(--teal)"/>
+                            <stop offset="100%" stop-color="var(--cyan)"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div>
+                <div class="nav-logo-text">Synaptix</div>
+                <div class="nav-logo-sub">AI for Health</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="#platform">Platform</a>
+            <a href="#gtm">Strategy</a>
+            <a href="#" class="nav-cta">Partner With Us</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-canvas-wrap">
+            <canvas id="heroCanvas"></canvas>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                Building the Infrastructure for Sleep Intelligence
+            </div>
+            <h1>
+                <span class="word">Clinical-Grade </span>
+                <span class="word">Sleep Labs </span>
+                <span class="word">— </span>
+                <span class="word glow">Anywhere.</span>
+            </h1>
+            <p class="hero-sub">AI-powered Level II home sleep diagnostics. Multi-modal ECG+EEG sensing, proprietary time-series AI, hardware-software co-design.</p>
+            <div class="hero-buttons">
+                <a href="#platform" class="btn-gradient"><span>Explore the Platform</span></a>
+                <a href="#" class="btn-outline-glow">Partner With Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wave Divider -->
+    <div class="wave-divider">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+            <path d="M0,40 C100,20 200,60 300,40 C400,20 500,55 600,40 C700,25 800,55 900,40 C1000,25 1100,50 1200,40"
+                  stroke="url(#waveGrad)" stroke-width="1.5" fill="none" opacity="0.5">
+                <animate attributeName="d"
+                    values="M0,40 C100,20 200,60 300,40 C400,20 500,55 600,40 C700,25 800,55 900,40 C1000,25 1100,50 1200,40;
+                            M0,40 C100,55 200,25 300,40 C400,55 500,25 600,40 C700,55 800,25 900,40 C1000,55 1100,30 1200,40;
+                            M0,40 C100,20 200,60 300,40 C400,20 500,55 600,40 C700,25 800,55 900,40 C1000,25 1100,50 1200,40"
+                    dur="6s" repeatCount="indefinite"/>
+            </path>
+            <defs>
+                <linearGradient id="waveGrad" x1="0" y1="0" x2="1200" y2="0">
+                    <stop offset="0%" stop-color="transparent"/>
+                    <stop offset="30%" stop-color="var(--teal)"/>
+                    <stop offset="70%" stop-color="var(--cyan)"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Problem -->
+    <section class="problem">
+        <div class="section-label">The Silent Epidemic</div>
+        <p class="problem-tagline">Sleep disorders are a silent epidemic — and the diagnostic system is broken.</p>
+
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-val">70M+</div>
+                <div class="stat-label">Americans with Sleep Disorders</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">$4,000</div>
+                <div class="stat-label">Average In-Lab PSG Cost</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">12 Wks</div>
+                <div class="stat-label">Average Wait for Diagnosis</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">80%</div>
+                <div class="stat-label">OSA Cases Still Undiagnosed</div>
+            </div>
+        </div>
+
+        <div class="pain-row">
+            <div class="pain-card">
+                <h4>Too Expensive</h4>
+                <p>Gold-standard PSG costs $2,000–$5,000 per study — prohibitive for most patients.</p>
+            </div>
+            <div class="pain-card">
+                <h4>Too Slow</h4>
+                <p>6–12 week wait times mean delayed diagnoses and worsening conditions.</p>
+            </div>
+            <div class="pain-card">
+                <h4>Consumer Wearables Fall Short</h4>
+                <p>Actigraphy is not diagnostic-grade. Clinicians cannot act on the outputs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wave Divider -->
+    <div class="wave-divider">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+            <path d="M0,40 C150,30 300,50 450,40 C600,30 750,50 900,40 C1050,30 1150,45 1200,40"
+                  stroke="url(#waveGrad)" stroke-width="1.5" fill="none" opacity="0.4">
+                <animate attributeName="d"
+                    values="M0,40 C150,30 300,50 450,40 C600,30 750,50 900,40 C1050,30 1150,45 1200,40;
+                            M0,40 C150,50 300,30 450,40 C600,50 750,30 900,40 C1050,50 1150,35 1200,40;
+                            M0,40 C150,30 300,50 450,40 C600,30 750,50 900,40 C1050,30 1150,45 1200,40"
+                    dur="5s" repeatCount="indefinite"/>
+            </path>
+        </svg>
+    </div>
+
+    <!-- Platform -->
+    <section class="platform" id="platform">
+        <div class="section-label">The Synaptix Platform</div>
+        <h2 class="section-title">An end-to-end, clinical-grade<br>sleep diagnostic ecosystem</h2>
+        <p class="section-desc">Powered by hardware-software co-design: signal preprocessing optimized at the hardware layer.</p>
+
+        <div class="platform-grid">
+            <div class="plat-card">
+                <div class="plat-header">
+                    <div class="plat-header-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+                    </div>
+                    Edge Sensing Hub
+                </div>
+                <span class="plat-type">Hardware</span>
+                <div class="plat-body">
+                    <ul>
+                        <li>Bluetooth SoC — low-power, reliable</li>
+                        <li>Multi-lead ECG acquisition</li>
+                        <li>EEG signal acquisition</li>
+                        <li>12+ hour battery life</li>
+                        <li>Designed for overnight comfort</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="plat-card">
+                <div class="plat-header">
+                    <div class="plat-header-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                    </div>
+                    Intelligent Mobile App
+                </div>
+                <span class="plat-type">Software</span>
+                <div class="plat-body">
+                    <ul>
+                        <li>Real-time signal validation</li>
+                        <li>Guided patient setup flow</li>
+                        <li>Secure end-to-end data upload</li>
+                        <li>User-friendly results reporting</li>
+                        <li>Provider notification system</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="plat-card">
+                <div class="plat-header">
+                    <div class="plat-header-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><path d="M10 21h4"/></svg>
+                    </div>
+                    AI Cloud Engine
+                </div>
+                <span class="plat-type">AI / Cloud</span>
+                <div class="plat-body">
+                    <ul>
+                        <li>Time-series deep learning models</li>
+                        <li>Multi-modal ECG+EEG signal fusion</li>
+                        <li>Sleep stage classification (5-stage)</li>
+                        <li>Apnea & arrhythmia detection</li>
+                        <li>Longitudinal sleep analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="plat-footer-note">Signal preprocessing at the hardware layer reduces noise, lowers cloud cost, and improves AI accuracy.</p>
+    </section>
+
+    <!-- GTM -->
+    <section class="gtm" id="gtm">
+        <div class="section-label">Go-to-Market</div>
+        <h2 class="section-title">Land & Expand</h2>
+        <p class="section-desc">A two-phase strategy that builds trust before deploying hardware.</p>
+
+        <div class="gtm-grid">
+            <div class="gtm-card">
+                <div class="gtm-card-header">
+                    Phase 1 — Land
+                    <div class="gtm-card-subtitle">AI-Scoring SaaS for Sleep Clinics</div>
+                </div>
+                <div class="gtm-card-body">
+                    <ul>
+                        <li>Eliminate manual scoring backlogs</li>
+                        <li>Lightweight cloud AI connects to existing lab workflows</li>
+                        <li>Establish trust with sleep physicians and lab directors</li>
+                        <li>Revenue model: $25–$75 per study</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="gtm-card">
+                <div class="gtm-card-header">
+                    Phase 2 — Expand
+                    <div class="gtm-card-subtitle">Type-II HST Device into Trusted Labs</div>
+                </div>
+                <div class="gtm-card-body">
+                    <ul>
+                        <li>Deploy proprietary HST device into partner labs</li>
+                        <li>Unlock CPT 95800/95806 reimbursement: $300–$450/study</li>
+                        <li>Hardware ASP: $600–$900/device</li>
+                        <li>Blended margin improves as SaaS + hardware compound</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>The Future of<br>Sleep Diagnostics</h2>
+        <a href="#" class="btn-gold">Get in Touch</a>
+        <p class="cta-email">info@synaptix.ai</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="left">&copy; 2026 Synaptix LLC</div>
+        <div class="right">A <a href="https://beatrite.com" target="_blank">Beatrite</a> company</div>
+    </footer>
+
+    <script>
+        // Nav scroll
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // Intersection observer
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.stat-box, .pain-card, .plat-card').forEach((el, i) => {
+            el.style.transitionDelay = `${i * 100}ms`;
+            io.observe(el);
+        });
+
+        // Hero waveform canvas
+        const hc = document.getElementById('heroCanvas');
+        const ctx = hc.getContext('2d');
+
+        function resize() {
+            hc.width = window.innerWidth * window.devicePixelRatio;
+            hc.height = window.innerHeight * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        window.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function drawHero(t) {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw multiple flowing waveform lines
+            const lines = [
+                { y: h * 0.3, amp: 40, freq: 0.008, speed: 0.0008, color: 'rgba(0, 229, 195, 0.12)', width: 2 },
+                { y: h * 0.45, amp: 55, freq: 0.006, speed: 0.0006, color: 'rgba(0, 229, 195, 0.18)', width: 2.5 },
+                { y: h * 0.6, amp: 35, freq: 0.01, speed: 0.001, color: 'rgba(6, 182, 212, 0.12)', width: 1.5 },
+                { y: h * 0.5, amp: 70, freq: 0.004, speed: 0.0005, color: 'rgba(0, 229, 195, 0.08)', width: 3 },
+                { y: h * 0.7, amp: 25, freq: 0.012, speed: 0.0012, color: 'rgba(6, 182, 212, 0.08)', width: 1 },
+            ];
+
+            lines.forEach(line => {
+                ctx.beginPath();
+                ctx.strokeStyle = line.color;
+                ctx.lineWidth = line.width;
+
+                for (let x = 0; x < w; x += 2) {
+                    // Mouse influence
+                    const dx = x - mouseX;
+                    const dy = line.y - mouseY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const mouseInfluence = Math.max(0, 1 - dist / 300) * 30;
+
+                    const y = line.y +
+                        Math.sin(x * line.freq + t * line.speed) * line.amp +
+                        Math.sin(x * line.freq * 2.3 + t * line.speed * 1.5) * (line.amp * 0.3) +
+                        mouseInfluence * Math.sin(dist / 30);
+
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            });
+
+            // ECG-like spike on the main line
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0, 229, 195, 0.35)';
+            ctx.lineWidth = 2;
+            const mainY = h * 0.45;
+
+            for (let x = 0; x < w; x += 1) {
+                let y = mainY + Math.sin(x * 0.006 + t * 0.0006) * 55;
+
+                // ECG spike pattern every ~200px
+                const localX = (x + t * 0.05) % 200;
+                if (localX > 80 && localX < 90) {
+                    y -= (localX - 80) * 8;
+                } else if (localX >= 90 && localX < 95) {
+                    y += (localX - 90) * 16;
+                } else if (localX >= 95 && localX < 100) {
+                    y -= (localX - 95) * 6;
+                }
+
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            requestAnimationFrame(drawHero);
+        }
+        requestAnimationFrame(drawHero);
+    </script>
+</body>
+</html>
