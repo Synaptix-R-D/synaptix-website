@@ -5,7 +5,7 @@
 
 const CONFIG = {
     CONTACT_EMAIL: 'info@synaptix.ai',
-    PARTNER_SUBJECT: 'Partnership Inquiry - Synaptix',
+    INVESTOR_SUBJECT: 'Investment Inquiry - Synaptix',
     CONTACT_SUBJECT: 'General Inquiry - Synaptix'
 };
 
