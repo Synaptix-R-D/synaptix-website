@@ -11,7 +11,7 @@
     "build:css": "cp assets/css/main.css dist/assets/css/",
     "build:js": "cp assets/js/main.js dist/assets/js/",
     "build:config": "cp config.js dist/",
-    "build:assets": "cp -r assets/images/* dist/assets/images/ 2>/dev/null || :",
+    "build:assets": "cp -r assets/images/* dist/assets/images/ 2>/dev/null || :; cp assets/favicon.svg dist/assets/; cp assets/favicon.svg dist/",
     "preview": "live-server dist --port=3001 --open=/index.html",
     "optimize": "npm run optimize:css && npm run optimize:js",
     "optimize:css": "postcss assets/css/main.css -o dist/assets/css/main.min.css --use autoprefixer cssnano",

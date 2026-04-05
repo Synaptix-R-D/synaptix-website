@@ -173,15 +173,14 @@
     }
 
     // --- CTA mailto links ---
+    var contactEmail = window.SYNAPTIX_CONFIG
+        ? window.SYNAPTIX_CONFIG.CONTACT_EMAIL
+        : 'info@beatrite.com';
+
     document.querySelectorAll('[data-mailto]').forEach(function (el) {
-        el.addEventListener('click', function (e) {
-            e.preventDefault();
-            var email = window.SYNAPTIX_CONFIG
-                ? window.SYNAPTIX_CONFIG.CONTACT_EMAIL
-                : 'info@beatrite.com';
-            var subject = el.getAttribute('data-subject') || 'Inquiry - Synaptix';
-            window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject);
-        });
+        var subject = el.getAttribute('data-subject') || 'Inquiry - Synaptix';
+        var mailto = 'mailto:' + contactEmail + '?subject=' + encodeURIComponent(subject);
+        el.setAttribute('href', mailto);
     });
 
 })();
