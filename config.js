@@ -4,7 +4,7 @@
  */
 
 const CONFIG = {
-    CONTACT_EMAIL: 'info@synaptix.ai',
+    CONTACT_EMAIL: 'info@beatrite.com',
     INVESTOR_SUBJECT: 'Investment Inquiry - Synaptix',
     CONTACT_SUBJECT: 'General Inquiry - Synaptix'
 };

@@ -178,7 +178,7 @@
             e.preventDefault();
             var email = window.SYNAPTIX_CONFIG
                 ? window.SYNAPTIX_CONFIG.CONTACT_EMAIL
-                : 'info@synaptix.ai';
+                : 'info@beatrite.com';
             var subject = el.getAttribute('data-subject') || 'Inquiry - Synaptix';
             window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject);
         });
